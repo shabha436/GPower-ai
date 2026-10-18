@@ -1,134 +1,294 @@
+
+<
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GPower AI</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GPower AI</title>
+<style>
+:root {
+  --orange: #ff7900;
+  --bg: #fff8f1;
+  --card: #ffffff;
+  --text: #29221d;
+  --muted: #76685e;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+header {
+  background: var(--card);
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #f2e4d8;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+.logo { color: var(--orange); font-size: 23px; font-weight: 800; }
+button, select, input, textarea { font: inherit; }
+button { cursor: pointer; }
+.theme-btn, .primary {
+  background: var(--orange);
+  color: white;
+  border: 0;
+  border-radius: 12px;
+  padding: 11px 15px;
+}
+main { max-width: 850px; margin: auto; padding: 22px 16px; }
+.hero { text-align: center; padding: 28px 0; }
+.hero h1 { font-size: clamp(30px, 6vw, 46px); margin-bottom: 8px; }
+.hero h1 span { color: var(--orange); }
+.hero p { color: var(--muted); }
+.tools {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.tool {
+  background: var(--card);
+  border: 1px solid #f0dfd0;
+  border-radius: 17px;
+  padding: 17px;
+  text-align: left;
+  color: var(--text);
+}
+.tool.active { border: 2px solid var(--orange); }
+.tool .emoji { font-size: 28px; }
+.tool h3 { margin: 8px 0 4px; }
+.tool p { color: var(--muted); font-size: 13px; margin: 0; }
+.panel {
+  background: var(--card);
+  border: 1px solid #f0dfd0;
+  border-radius: 18px;
+  padding: 20px;
+  margin-top: 20px;
+}
+label { display: block; margin: 14px 0 7px; font-weight: 650; }
+input, textarea, select {
+  width: 100%;
+  border: 1px solid #e6d6c8;
+  border-radius: 11px;
+  padding: 12px;
+  background: var(--card);
+  color: var(--text);
+}
+textarea { min-height: 125px; resize: vertical; }
+.primary { width: 100%; margin-top: 14px; font-weight: 700; }
+#result {
+  white-space: pre-wrap;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+.actions { display: flex; gap: 10px; margin-top: 12px; }
+.actions button { flex: 1; border-radius: 10px; padding: 10px; }
+.note { color: var(--muted); font-size: 12px; line-height: 1.5; }
+footer { text-align: center; padding: 25px; color: var(--muted); }
+body.dark {
+  --bg: #171411; --card: #24201c; --text: #fff4e9;
+  --muted: #c5b5a7;
+}
+body.dark .tool, body.dark .panel, body.dark header {
+  border-color: #44352a;
+}
+@media(max-width:420px) {
+  .tools { grid-template-columns: 1fr 1fr; }
+  .tool { padding: 12px; }
+  .panel { padding: 15px; }
+}
+</style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
-  <header class="border-b border-slate-800 bg-slate-900 px-6 py-4 flex justify-between items-center">
-    <h1 class="text-xl font-bold text-orange-500">GPower AI</h1>
-    <span class="text-xs text-slate-400">Study & Creative AI Companion</span>
-  </header>
+<body>
+<header>
+  <div class="logo" id="brand">✦ GPower AI</div>
+  <button class="theme-btn" onclick="toggleTheme()">◐ Theme</button>
+</header>
 
-  <div class="flex-1 flex flex-col md:flex-row max-w-7xl w-full mx-auto p-4 gap-4">
-    <nav class="w-full md:w-64 bg-slate-900 border border-slate-800 rounded-2xl p-4 flex md:flex-col gap-2">
-      <button onclick="switchTab('study')" id="btn-study" class="p-3 rounded-xl text-left font-medium bg-orange-500 text-white transition">Study Assistant</button>
-      <button onclick="switchTab('image')" id="btn-image" class="p-3 rounded-xl text-left font-medium text-slate-400 hover:bg-slate-800 transition">Image Generator</button>
-      <button onclick="switchTab('story')" id="btn-story" class="p-3 rounded-xl text-left font-medium text-slate-400 hover:bg-slate-800 transition">Story & Ideas</button>
-      <button onclick="switchTab('notes')" id="btn-notes" class="p-3 rounded-xl text-left font-medium text-slate-400 hover:bg-slate-800 transition">Study Notes</button>
-    </nav>
+<main>
+  <section class="hero">
+    <h1>Learn. Imagine. <span>Create.</span></h1>
+    <p>Your personal AI space for studies, images and ideas.</p>
+  </section>
 
-    <main class="flex-1 bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between">
-      <!-- Study Assistant Tab -->
-      <div id="tab-study" class="flex flex-col h-full justify-between">
-        <div id="chat-container" class="space-y-3 mb-4 max-h-[350px] overflow-y-auto pr-2">
-          <div class="p-3 rounded-xl max-w-[80%] bg-slate-800 text-slate-200">
-            హలో బిట్టు! నేను GPower AI. మీకు చదువులో సహాయం కావాలన్నా, ఇమేజెస్ క్రియేట్ చేయాలన్నా లేదా ఏ ప్రశ్నకైనా సమాధానం అడగండి!
-          </div>
-        </div>
-        <div class="flex gap-2">
-          <input type="text" id="chat-input" placeholder="Type your query here..." class="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-orange-500" />
-          <button onclick="sendMessage()" class="bg-orange-500 hover:bg-orange-600 text-white px-5 rounded-xl font-medium transition">Send</button>
-        </div>
-      </div>
+  <section class="tools">
+    <button class="tool active" onclick="choose('study',this)">
+      <div class="emoji">📚</div><h3>Study Assistant</h3>
+      <p>Notes, explanations & questions</p>
+    </button>
+    <button class="tool" onclick="choose('image',this)">
+      <div class="emoji">🎨</div><h3>Image Creator</h3>
+      <p>Turn your prompts into pictures</p>
+    </button>
+    <button class="tool" onclick="choose('idea',this)">
+      <div class="emoji">💡</div><h3>Idea Generator</h3>
+      <p>Discover something new</p>
+    </button>
+    <button class="tool" onclick="choose('story',this)">
+      <div class="emoji">📖</div><h3>Story Writer</h3>
+      <p>Create your own stories</p>
+    </button>
+  </section>
 
-      <!-- Image Generator Tab -->
-      <div id="tab-image" class="hidden flex flex-col h-full">
-        <h2 class="text-lg font-semibold mb-4 text-orange-400">AI Image Generator</h2>
-        <div class="flex gap-2 mb-4">
-          <input type="text" id="image-prompt" placeholder="Describe the image you want..." class="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-orange-500" />
-          <button onclick="generateImage()" class="bg-orange-500 hover:bg-orange-600 text-white px-5 rounded-xl font-medium transition">Generate</button>
-        </div>
-        <div id="image-output" class="flex-1 border-2 border-dashed border-slate-800 rounded-2xl flex items-center justify-center text-slate-500 min-h-[220px]">
-          Image output will appear here
-        </div>
-      </div>
+  <section class="panel">
+    <h2 id="toolTitle">📚 Study Assistant</h2>
+    <p id="toolDesc">Understand your subjects in simple language.</p>
 
-      <!-- Story Tab -->
-      <div id="tab-story" class="hidden flex flex-col h-full">
-        <h2 class="text-lg font-semibold mb-4 text-orange-400">Story & Idea Generator</h2>
-        <textarea id="story-prompt" rows="3" placeholder="Enter a topic or idea..." class="w-full bg-slate-950 border border-slate-700 rounded-xl p-4 text-sm text-white focus:outline-none focus:border-orange-500 mb-4"></textarea>
-        <button onclick="generateStory()" class="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-xl font-medium w-max transition mb-4">Generate Story</button>
-        <div id="story-output" class="flex-1 bg-slate-950 border border-slate-800 rounded-xl p-4 text-slate-300 text-sm overflow-y-auto">
-          Generated story/ideas will appear here...
-        </div>
-      </div>
+    <label for="topic">Topic or your prompt</label>
+    <textarea id="topic" placeholder="Example: Explain photosynthesis in simple English"></textarea>
 
-      <!-- Notes Tab -->
-      <div id="tab-notes" class="hidden flex flex-col h-full">
-        <h2 class="text-lg font-semibold mb-4 text-orange-400">Study Notes Vault</h2>
-        <input type="text" id="note-title" placeholder="Note Title" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2 text-sm text-white mb-2 focus:outline-none focus:border-orange-500" />
-        <textarea id="note-content" rows="2" placeholder="Write your notes here..." class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-sm text-white mb-3 focus:outline-none focus:border-orange-500"></textarea>
-        <button onclick="saveNote()" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-xl text-sm font-medium w-max mb-4 transition">Save Note</button>
-        <div id="notes-list" class="flex-1 space-y-2 overflow-y-auto">
-          <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
-            <div class="font-bold text-orange-400">Physics Formulas</div>
-            <div class="text-xs text-slate-400">Sample saved note content...</div>
-          </div>
-        </div>
-      </div>
-    </main>
-  </div>
+    <div id="extraFields">
+      <label for="level">Study level / output style</label>
+      <select id="level">
+        <option>Simple explanation</option>
+        <option>Detailed notes</option>
+        <option>Important questions and answers</option>
+        <option>Short summary</option>
+        <option>Telugu explanation</option>
+      </select>
+    </div>
 
-  <script>
-    function switchTab(tabName) {
-      ['study', 'image', 'story', 'notes'].forEach(t => {
-        document.getElementById('tab-' + t).classList.add('hidden');
-        document.getElementById('btn-' + t).className = "p-3 rounded-xl text-left font-medium text-slate-400 hover:bg-slate-800 transition";
-      });
-      document.getElementById('tab-' + tabName).classList.remove('hidden');
-      document.getElementById('btn-' + tabName).className = "p-3 rounded-xl text-left font-medium bg-orange-500 text-white transition";
-    }
+    <button class="primary" onclick="generate()">Generate ✨</button>
+    <p class="note" id="status">Demo mode: connect an AI service to generate real AI responses.</p>
+  </section>
 
-    function sendMessage() {
-      const input = document.getElementById('chat-input');
-      const container = document.getElementById('chat-container');
-      if (!input.value.trim()) return;
+  <section class="panel" id="outputPanel" hidden>
+    <h2>Your Result</h2>
+    <div id="result"></div>
+    <div class="actions">
+      <button onclick="copyResult()">📋 Copy</button>
+      <button onclick="downloadResult()">⬇ Save TXT</button>
+    </div>
+    <div id="imageResult"></div>
+  </section>
+</main>
 
-      const userText = input.value;
-      container.innerHTML += `<div class="p-3 rounded-xl max-w-[80%] bg-orange-600 text-white ml-auto">${userText}</div>`;
-      input.value = '';
+<footer>Made with 🧡 using GPower AI</footer>
 
-      setTimeout(() => {
-        container.innerHTML += `<div class="p-3 rounded-xl max-w-[80%] bg-slate-800 text-slate-200">మీరు అడిగిన "${userText}" కి తగిన సమాచారం ఇదిగోండి: దీనికి సంబంధించిన పూర్తి వివరాలు త్వరలో అప్‌డేట్ చేయబడతాయి!</div>`;
-        container.scrollTop = container.scrollHeight;
-      }, 800);
-      container.scrollTop = container.scrollHeight;
-    }
+<script>
+let currentTool = "study";
+let lastResult = "";
 
-    function generateImage() {
-      const prompt = document.getElementById('image-prompt').value;
-      const output = document.getElementById('image-output');
-      if (!prompt.trim()) return;
+const config = {
+  study: {
+    title: "📚 Study Assistant",
+    desc: "Understand your subjects in simple language.",
+    placeholder: "Example: Explain photosynthesis",
+    options: ["Simple explanation","Detailed notes",
+      "Important questions and answers","Short summary","Telugu explanation"]
+  },
+  image: {
+    title: "🎨 AI Image Creator",
+    desc: "Describe the picture you want to create.",
+    placeholder: "Example: A beautiful orange sunset over a village",
+    options: ["Realistic","Digital art","Cartoon","Watercolor","3D illustration"]
+  },
+  idea: {
+    title: "💡 Idea Generator",
+    desc: "Find ideas for projects, websites, games or creativity.",
+    placeholder: "Example: Ideas for a useful student website",
+    options: ["Website ideas","App ideas","Game ideas","School projects","Creative ideas"]
+  },
+  story: {
+    title: "📖 Story Writer",
+    desc: "Create stories with your own characters and settings.",
+    placeholder: "Example: A little rabbit who discovers a magic garden",
+    options: ["Short story","Adventure","Comedy","Moral story","Fantasy"]
+  }
+};
 
-      output.innerHTML = `<div class="text-orange-400 animate-pulse">Generating image for "${prompt}"...</div>`;
-      setTimeout(() => {
-        output.innerHTML = `<img src="https://picsum.photos/seed/${encodeURIComponent(prompt)}/400/250" class="rounded-xl object-cover w-full h-full shadow-lg" alt="Generated Image"/>`;
-      }, 1200);
-    }
+function choose(tool, button) {
+  currentTool = tool;
+  document.querySelectorAll(".tool").forEach(b => b.classList.remove("active"));
+  button.classList.add("active");
+  document.getElementById("toolTitle").textContent = config[tool].title;
+  document.getElementById("toolDesc").textContent = config[tool].desc;
+  document.getElementById("topic").placeholder = config[tool].placeholder;
+  document.getElementById("level").replaceChildren();
+  config[tool].options.forEach(value => {
+    const option = document.createElement("option");
+    option.textContent = value;
+    document.getElementById("level").appendChild(option);
+  });
+  document.getElementById("extraFields").hidden = false;
+  document.getElementById("imageResult").replaceChildren();
+  if (tool === "image") {
+    document.getElementById("extraFields").hidden = false;
+  }
+}
 
-    function generateStory() {
-      const prompt = document.getElementById('story-prompt').value;
-      const output = document.getElementById('story-output');
-      if (!prompt.trim()) return;
-      output.innerHTML = "Generating ideas...";
-      setTimeout(() => {
-        output.innerHTML = `<strong>సజెషన్స్ & ఐడియాలు (${prompt}):</strong><br>1. ఈ అంశంపై ప్రధాన ముఖ్యాంశాలు మరియు వివరణ.<br>2. దీనిని సులభంగా అర్థం చేసుకునే పద్ధతులు.<br>3. పరీక్షల కోసం ముఖ్యమైన బిట్స్.`;
-      }, 1000);
-    }
+async function generate() {
+  const prompt = document.getElementById("topic").value.trim();
+  if (!prompt) {
+    alert("Please enter a topic or prompt first!");
+    return;
+  }
 
-    function saveNote() {
-      const title = document.getElementById('note-title').value;
-      const content = document.getElementById('note-content').value;
-      const list = document.getElementById('notes-list');
-      if (!title.trim()) return;
+  const style = document.getElementById("level").value;
+  const status = document.getElementById("status");
+  const panel = document.getElementById("outputPanel");
+  const result = document.getElementById("result");
+  const imageResult = document.getElementById("imageResult");
 
-      list.innerHTML += `<div class="bg-slate-950 p-3 rounded-xl border border-slate-800"><div class="font-bold text-orange-400">${title}</div><div class="text-xs text-slate-400">${content}</div></div>`;
-      document.getElementById('note-title').value = '';
-      document.getElementById('note-content').value = '';
-    }
-  </script>
+  panel.hidden = false;
+  imageResult.replaceChildren();
+  status.textContent = "Preparing your request...";
+  result.textContent = "";
+
+  if (currentTool === "image") {
+    result.textContent =
+      "Your image prompt is ready. To generate an actual image, connect an image-generation API. This HTML demo does not create images by itself.";
+    const pre = document.createElement("p");
+    pre.textContent = "Prompt: " + prompt + "\nStyle: " + style;
+    result.appendChild(pre);
+    lastResult = "Image prompt: " + prompt + "\nStyle: " + style;
+    status.textContent = "Image API connection required.";
+    return;
+  }
+
+  if (currentTool === "study") {
+    lastResult = "Study topic: " + prompt + "\nRequested format: " + style +
+      "\n\nTo generate accurate notes, connect an AI API.";
+  } else if (currentTool === "idea") {
+    lastResult = "Idea request: " + prompt + "\nCategory: " + style +
+      "\n\nTo generate personalized ideas, connect an AI API.";
+  } else {
+    lastResult = "Story prompt: " + prompt + "\nStyle: " + style +
+      "\n\nTo write a complete story, connect an AI API.";
+  }
+
+  result.textContent = lastResult;
+  status.textContent = "Demo mode: this is a prompt preview, not an AI-generated answer.";
+}
+
+async function copyResult() {
+  try {
+    await navigator.clipboard.writeText(lastResult);
+    alert("Copied!");
+  } catch {
+    alert("Copy isn't supported here. Select the result text and copy it manually.");
+  }
+}
+
+function downloadResult() {
+  const blob = new Blob([lastResult], {type:"text/plain;charset=utf-8"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "GPower-AI-result.txt";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function toggleTheme() {
+  document.body.classList.toggle("dark");
+}
+</script>
 </body>
 </html>
