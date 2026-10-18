@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,23 +14,121 @@
 
   <div class="flex-1 flex flex-col md:flex-row max-w-7xl w-full mx-auto p-4 gap-4">
     <nav class="w-full md:w-64 bg-slate-900 border border-slate-800 rounded-2xl p-4 flex md:flex-col gap-2">
-      <div class="p-3 rounded-xl text-left font-medium bg-orange-500 text-white">Study Assistant</div>
-      <div class="p-3 rounded-xl text-left font-medium text-slate-400">Image Generator</div>
-      <div class="p-3 rounded-xl text-left font-medium text-slate-400">Story & Ideas</div>
-      <div class="p-3 rounded-xl text-left font-medium text-slate-400">Study Notes</div>
+      <button onclick="switchTab('study')" id="btn-study" class="p-3 rounded-xl text-left font-medium bg-orange-500 text-white transition">Study Assistant</button>
+      <button onclick="switchTab('image')" id="btn-image" class="p-3 rounded-xl text-left font-medium text-slate-400 hover:bg-slate-800 transition">Image Generator</button>
+      <button onclick="switchTab('story')" id="btn-story" class="p-3 rounded-xl text-left font-medium text-slate-400 hover:bg-slate-800 transition">Story & Ideas</button>
+      <button onclick="switchTab('notes')" id="btn-notes" class="p-3 rounded-xl text-left font-medium text-slate-400 hover:bg-slate-800 transition">Study Notes</button>
     </nav>
 
     <main class="flex-1 bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between">
-      <div class="space-y-3 mb-4">
-        <div class="p-3 rounded-xl max-w-[80%] bg-slate-800 text-slate-200">
-          హలో బిట్టు! నేను GPower AI. మీకు చదువులో సహాయం కావాలన్నా, ఇమేజెస్ క్రియేట్ చేయాలన్నా లేదా కథలు/ఐడియాలు కావాలన్నా అడగండి!
+      <!-- Study Assistant Tab -->
+      <div id="tab-study" class="flex flex-col h-full justify-between">
+        <div id="chat-container" class="space-y-3 mb-4 max-h-[350px] overflow-y-auto pr-2">
+          <div class="p-3 rounded-xl max-w-[80%] bg-slate-800 text-slate-200">
+            హలో బిట్టు! నేను GPower AI. మీకు చదువులో సహాయం కావాలన్నా, ఇమేజెస్ క్రియేట్ చేయాలన్నా లేదా ఏ ప్రశ్నకైనా సమాధానం అడగండి!
+          </div>
+        </div>
+        <div class="flex gap-2">
+          <input type="text" id="chat-input" placeholder="Type your query here..." class="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-orange-500" />
+          <button onclick="sendMessage()" class="bg-orange-500 hover:bg-orange-600 text-white px-5 rounded-xl font-medium transition">Send</button>
         </div>
       </div>
-      <div class="flex gap-2">
-        <input type="text" placeholder="Type your query..." class="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white" />
-        <button class="bg-orange-500 text-white px-5 rounded-xl font-medium">Send</button>
+
+      <!-- Image Generator Tab -->
+      <div id="tab-image" class="hidden flex flex-col h-full">
+        <h2 class="text-lg font-semibold mb-4 text-orange-400">AI Image Generator</h2>
+        <div class="flex gap-2 mb-4">
+          <input type="text" id="image-prompt" placeholder="Describe the image you want..." class="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-orange-500" />
+          <button onclick="generateImage()" class="bg-orange-500 hover:bg-orange-600 text-white px-5 rounded-xl font-medium transition">Generate</button>
+        </div>
+        <div id="image-output" class="flex-1 border-2 border-dashed border-slate-800 rounded-2xl flex items-center justify-center text-slate-500 min-h-[220px]">
+          Image output will appear here
+        </div>
+      </div>
+
+      <!-- Story Tab -->
+      <div id="tab-story" class="hidden flex flex-col h-full">
+        <h2 class="text-lg font-semibold mb-4 text-orange-400">Story & Idea Generator</h2>
+        <textarea id="story-prompt" rows="3" placeholder="Enter a topic or idea..." class="w-full bg-slate-950 border border-slate-700 rounded-xl p-4 text-sm text-white focus:outline-none focus:border-orange-500 mb-4"></textarea>
+        <button onclick="generateStory()" class="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-xl font-medium w-max transition mb-4">Generate Story</button>
+        <div id="story-output" class="flex-1 bg-slate-950 border border-slate-800 rounded-xl p-4 text-slate-300 text-sm overflow-y-auto">
+          Generated story/ideas will appear here...
+        </div>
+      </div>
+
+      <!-- Notes Tab -->
+      <div id="tab-notes" class="hidden flex flex-col h-full">
+        <h2 class="text-lg font-semibold mb-4 text-orange-400">Study Notes Vault</h2>
+        <input type="text" id="note-title" placeholder="Note Title" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2 text-sm text-white mb-2 focus:outline-none focus:border-orange-500" />
+        <textarea id="note-content" rows="2" placeholder="Write your notes here..." class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-sm text-white mb-3 focus:outline-none focus:border-orange-500"></textarea>
+        <button onclick="saveNote()" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-xl text-sm font-medium w-max mb-4 transition">Save Note</button>
+        <div id="notes-list" class="flex-1 space-y-2 overflow-y-auto">
+          <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+            <div class="font-bold text-orange-400">Physics Formulas</div>
+            <div class="text-xs text-slate-400">Sample saved note content...</div>
+          </div>
+        </div>
       </div>
     </main>
   </div>
+
+  <script>
+    function switchTab(tabName) {
+      ['study', 'image', 'story', 'notes'].forEach(t => {
+        document.getElementById('tab-' + t).classList.add('hidden');
+        document.getElementById('btn-' + t).className = "p-3 rounded-xl text-left font-medium text-slate-400 hover:bg-slate-800 transition";
+      });
+      document.getElementById('tab-' + tabName).classList.remove('hidden');
+      document.getElementById('btn-' + tabName).className = "p-3 rounded-xl text-left font-medium bg-orange-500 text-white transition";
+    }
+
+    function sendMessage() {
+      const input = document.getElementById('chat-input');
+      const container = document.getElementById('chat-container');
+      if (!input.value.trim()) return;
+
+      const userText = input.value;
+      container.innerHTML += `<div class="p-3 rounded-xl max-w-[80%] bg-orange-600 text-white ml-auto">${userText}</div>`;
+      input.value = '';
+
+      setTimeout(() => {
+        container.innerHTML += `<div class="p-3 rounded-xl max-w-[80%] bg-slate-800 text-slate-200">మీరు అడిగిన "${userText}" కి తగిన సమాచారం ఇదిగోండి: దీనికి సంబంధించిన పూర్తి వివరాలు త్వరలో అప్‌డేట్ చేయబడతాయి!</div>`;
+        container.scrollTop = container.scrollHeight;
+      }, 800);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function generateImage() {
+      const prompt = document.getElementById('image-prompt').value;
+      const output = document.getElementById('image-output');
+      if (!prompt.trim()) return;
+
+      output.innerHTML = `<div class="text-orange-400 animate-pulse">Generating image for "${prompt}"...</div>`;
+      setTimeout(() => {
+        output.innerHTML = `<img src="https://picsum.photos/seed/${encodeURIComponent(prompt)}/400/250" class="rounded-xl object-cover w-full h-full shadow-lg" alt="Generated Image"/>`;
+      }, 1200);
+    }
+
+    function generateStory() {
+      const prompt = document.getElementById('story-prompt').value;
+      const output = document.getElementById('story-output');
+      if (!prompt.trim()) return;
+      output.innerHTML = "Generating ideas...";
+      setTimeout(() => {
+        output.innerHTML = `<strong>సజెషన్స్ & ఐడియాలు (${prompt}):</strong><br>1. ఈ అంశంపై ప్రధాన ముఖ్యాంశాలు మరియు వివరణ.<br>2. దీనిని సులభంగా అర్థం చేసుకునే పద్ధతులు.<br>3. పరీక్షల కోసం ముఖ్యమైన బిట్స్.`;
+      }, 1000);
+    }
+
+    function saveNote() {
+      const title = document.getElementById('note-title').value;
+      const content = document.getElementById('note-content').value;
+      const list = document.getElementById('notes-list');
+      if (!title.trim()) return;
+
+      list.innerHTML += `<div class="bg-slate-950 p-3 rounded-xl border border-slate-800"><div class="font-bold text-orange-400">${title}</div><div class="text-xs text-slate-400">${content}</div></div>`;
+      document.getElementById('note-title').value = '';
+      document.getElementById('note-content').value = '';
+    }
+  </script>
 </body>
 </html>
