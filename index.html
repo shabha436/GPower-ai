@@ -223,8 +223,10 @@ function choose(tool, button) {
   }
 }
 
+
 async function generate() {
   const prompt = document.getElementById("topic").value.trim();
+
   if (!prompt) {
     alert("Please enter a topic or prompt first!");
     return;
@@ -237,58 +239,50 @@ async function generate() {
   const imageResult = document.getElementById("imageResult");
 
   panel.hidden = false;
-  imageResult.replaceChildren();
-  status.textContent = "Preparing your request...";
   result.textContent = "";
+  imageResult.replaceChildren();
 
   if (currentTool === "image") {
-    result.textContent =
-      "Your image prompt is ready. To generate an actual image, connect an image-generation API. This HTML demo does not create images by itself.";
-    const pre = document.createElement("p");
-    pre.textContent = "Prompt: " + prompt + "\nStyle: " + style;
-    result.appendChild(pre);
     lastResult = "Image prompt: " + prompt + "\nStyle: " + style;
-    status.textContent = "Image API connection required.";
+    result.textContent =
+      lastResult +
+      "\n\nActual image generation is not connected yet.";
+    status.textContent =
+      "Image generation needs a separate image API.";
     return;
   }
 
-  if (currentTool === "study") {
-    lastResult = "Study topic: " + prompt + "\nRequested format: " + style +
-      "\n\nTo generate accurate notes, connect an AI API.";
-  } else if (currentTool === "idea") {
-    lastResult = "Idea request: " + prompt + "\nCategory: " + style +
-      "\n\nTo generate personalized ideas, connect an AI API.";
-  } else {
-    lastResult = "Story prompt: " + prompt + "\nStyle: " + style +
-      "\n\nTo write a complete story, connect an AI API.";
-  }
+  status.textContent = "GPower AI is thinking...";
+  lastResult = "";
 
-  result.textContent = lastResult;
-  status.textContent = "Demo mode: this is a prompt preview, not an AI-generated answer.";
-}
-
-async function copyResult() {
   try {
-    await navigator.clipboard.writeText(lastResult);
-    alert("Copied!");
-  } catch {
-    alert("Copy isn't supported here. Select the result text and copy it manually.");
+    const response = await fetch("/api/chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        prompt: prompt,
+        tool: currentTool,
+        style: style
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "AI request failed");
+    }
+
+    lastResult = data.answer || "No answer returned.";
+    result.textContent = lastResult;
+    status.textContent = "GPower AI response ready! 🧡";
+
+  } catch (error) {
+    result.textContent =
+      "Sorry, the AI could not respond. Please try again.";
+    status.textContent =
+      "Connection error. Check the API code and Vercel deployment.";
+    console.error(error);
   }
 }
-
-function downloadResult() {
-  const blob = new Blob([lastResult], {type:"text/plain;charset=utf-8"});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "GPower-AI-result.txt";
-  a.click();
-  URL.revokeObjectURL(url);
-}
-
-function toggleTheme() {
-  document.body.classList.toggle("dark");
-}
-</script>
-</body>
-</html>
