@@ -1,1 +1,37 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GPower AI</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
+  <header class="border-b border-slate-800 bg-slate-900 px-6 py-4 flex justify-between items-center">
+    <h1 class="text-xl font-bold text-orange-500">GPower AI</h1>
+    <span class="text-xs text-slate-400">Study & Creative AI Companion</span>
+  </header>
+
+  <div class="flex-1 flex flex-col md:flex-row max-w-7xl w-full mx-auto p-4 gap-4">
+    <nav class="w-full md:w-64 bg-slate-900 border border-slate-800 rounded-2xl p-4 flex md:flex-col gap-2">
+      <div class="p-3 rounded-xl text-left font-medium bg-orange-500 text-white">Study Assistant</div>
+      <div class="p-3 rounded-xl text-left font-medium text-slate-400">Image Generator</div>
+      <div class="p-3 rounded-xl text-left font-medium text-slate-400">Story & Ideas</div>
+      <div class="p-3 rounded-xl text-left font-medium text-slate-400">Study Notes</div>
+    </nav>
+
+    <main class="flex-1 bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between">
+      <div class="space-y-3 mb-4">
+        <div class="p-3 rounded-xl max-w-[80%] bg-slate-800 text-slate-200">
+          హలో బిట్టు! నేను GPower AI. మీకు చదువులో సహాయం కావాలన్నా, ఇమేజెస్ క్రియేట్ చేయాలన్నా లేదా కథలు/ఐడియాలు కావాలన్నా అడగండి!
+        </div>
+      </div>
+      <div class="flex gap-2">
+        <input type="text" placeholder="Type your query..." class="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white" />
+        <button class="bg-orange-500 text-white px-5 rounded-xl font-medium">Send</button>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
